@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+.post__wrapper, .comment__wrapper {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  width: 50%;
+}
+
+.post__title {
+  font-size: 15px;
+}
+.post__content {
+  font-size: 12px;
+}
