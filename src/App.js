@@ -1,9 +1,8 @@
 import {useState} from 'react'
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
 import React from 'react'
 import axios from 'axios';
-import PropTypes from 'prop-types';
 
 class Timer extends React.Component {
   constructor(props) {
@@ -82,32 +81,43 @@ const comments = [
 
 // React Hooks syntax
 function Comment ({ data }) {
-  const [counter, setCounter] = useState(0);
+  let [showComment, setShowComment] = useState(true);
 
   const deleteComment = () => {
-    return axios.delete(`/restapi/comment/${data.id}`)
+    //return axios.delete(`/restapi/comment/${data.id}`)
+    return Promise.resolve()
+        .then(() => setShowComment(showComment = false)
+       )
+        .catch(error => {
+          console.error('There was an error!', error);
+      });
   }
 
-  return(
-    <div className={'comment__wrapper'}>
-      <div className='comment__author'>author: {data.author.name}</div>
-      <div className='comment__content'>{data.content}</div>
-      <Button onClick={deleteComment} title={'Delete comment'}/>
-    </div>
-  )
+  if(showComment){
+    return(
+      <div className={'comment__wrapper'}>
+        <div className='comment__author'>author: {data.author.name}</div>
+        <div className='comment__content'>{data.content}</div>
+        <Button onClick={deleteComment} title={'Delete comment'}/>
+      </div>
+    )
+  }
+  return(<div></div>);
 }
 
 // UI for comment. Represent comment data (restapi GET data) to the user.
 function Post ({ data }) {
-  /*
-    Interpolation:
 
-    f"adasd{request.user.id}asdasdas"
-    `adasd${request.user.id}asdasdas`
-   */
+  let [showPost, setShowPost] = useState(true);
 
   const deletePost = () => {
-    return axios.delete(`/restapi/post/${data.id}`)
+    //return axios.delete(`/restapi/post/${data.id}`)
+    return Promise.resolve()
+        .then(() => setShowPost(showPost = false)
+       )
+        .catch(error => {
+          console.error('There was an error!', error);
+      });
   }
 
   // className = CSS classes,
@@ -122,7 +132,7 @@ function Post ({ data }) {
   // post__title
   // post__title--red
   // post__title--large
-
+if(showPost){
   return (
     <div className={'post__wrapper'}>
       <div className='post__title'>Title: {data.title}</div>
@@ -136,6 +146,10 @@ function Post ({ data }) {
       </div>
     </div>
   )
+}
+else{
+  return(<div></div>)
+}
 }
 
 
