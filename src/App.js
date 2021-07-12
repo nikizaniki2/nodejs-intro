@@ -1,37 +1,8 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 //import logo from './logo.svg';
 import './App.css';
 import React from 'react'
 import axios from 'axios';
-
-class Timer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { seconds: 0 };
-  }
-
-  tick() {
-    this.setState(state => ({
-      seconds: state.seconds + 1
-    }));
-  }
-
-  componentDidMount() {
-    this.interval = setInterval(() => this.tick(), 1000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
-
-  render() {
-    return (
-      <div>
-        Seconds: {this.state.seconds}
-      </div>
-    );
-  }
-}
 
 // Same but as function
 function Button ({ title, onClick }) {
@@ -81,99 +52,120 @@ const comments = [
 
 // React Hooks syntax
 function Comment ({ data }) {
-  let [showComment, setShowComment] = useState(true);
-
+  const [listed, setListed] = useState(true);
+//https://dev.to/chilupa/remove-element-from-dom-in-react-way-n2l
   const deleteComment = () => {
     //return axios.delete(`/restapi/comment/${data.id}`)
-    return Promise.resolve()
-        .then(() => setShowComment(showComment = false)
-       )
-        .catch(error => {
-          console.error('There was an error!', error);
-      });
+    setListed(false);
   }
 
-  if(showComment){
-    return(
-      <div className={'comment__wrapper'}>
-        <div className='comment__author'>author: {data.author.name}</div>
-        <div className='comment__content'>{data.content}</div>
-        <Button onClick={deleteComment} title={'Delete comment'}/>
-      </div>
-    )
-  }
-  return(<div></div>);
+  return listed ? (
+    <div className={'comment__wrapper'}>
+      <div className='comment__author'>author: {data.author.name}</div>
+      <div className='comment__content'>{data.content}</div>
+      <Button onClick={deleteComment} title={'Delete comment'}/>
+    </div>
+  )
+  :
+  null
+}
+
+// className = CSS classes,
+// CSS BEM model (naming convention)
+// block__element--modification
+
+// button--primary
+// button--secondary
+
+// .toolbar__button--red
+
+// post__title
+// post__title--red
+// post__title--large
+
+async function loadComments () {
+  return Promise.resolve(comments)
 }
 
 // UI for comment. Represent comment data (restapi GET data) to the user.
 function Post ({ data }) {
-
-  let [showPost, setShowPost] = useState(true);
+  // request comments for this post from API and display them
+  const [comments, setComments] = useState([]);
+  const [listed, setListed] = useState(true);
+  //https://dev.to/chilupa/remove-element-from-dom-in-react-way-n2l
+  
+  useEffect(() => {
+    loadComments().then(comments => setComments(comments))
+  }, []);
 
   const deletePost = () => {
     //return axios.delete(`/restapi/post/${data.id}`)
-    return Promise.resolve()
-        .then(() => setShowPost(showPost = false)
-       )
-        .catch(error => {
-          console.error('There was an error!', error);
-      });
+    setListed(false);
   }
 
-  // className = CSS classes,
-  // CSS BEM model (naming convention)
-  // block__element--modification
-
-  // button--primary
-  // button--secondary
-
-  // .toolbar__button--red
-  
-  // post__title
-  // post__title--red
-  // post__title--large
-if(showPost){
-  return (
+  return listed ? (
     <div className={'post__wrapper'}>
       <div className='post__title'>Title: {data.title}</div>
       <div className='post__content'>{data.content}</div>
       <Button onClick={deletePost} title={'Delete post'}/>
+
       <div className='comment__list'>
-        { comments
-          .filter(commentData => commentData.postId === data.id)
-          .map(commentData => <Comment data={commentData} />)
-        }
+      { comments
+        .filter(commentData => commentData.postId === data.id)
+        .map(commentsData => <Comment data={commentsData} />) }
       </div>
     </div>
   )
-}
-else{
-  return(<div></div>)
-}
+  :
+  null
 }
 
+async function loadPosts () {
+  // axios.get('/posts/')
+  return Promise.resolve(posts)
+}
+
+class NewsFeedClass extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      posts: []
+    }
+  }
+
+  // One-time callback after first render
+  // Equivalent to useEffect(() => {...}, []);
+  componentDidMount() {
+    loadPosts()
+      .then(posts => this.setState({posts}))
+      .catch(() => alert('Failed to load posts from API'))
+  }
+
+  render () {
+    return <div className="App">
+      <header className="App-header">
+        { posts.map(postData => <Post data={postData} />) }
+      </header>
+    </div>
+  }
+}
 
 function NewsFeed() {
+  const [posts, setPosts] = useState([]);
+  // const [ count, setCpunt] = useUstate
+  // const [ count2, setCpunt2] = useUstate
+
+  useEffect(() => {
+    loadPosts().then(posts => setPosts(posts))
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
         { posts.map(postData => <Post data={postData} />) }
-
-        <Timer></Timer>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
     </div>
   );
 }
 
-export default NewsFeed;
+export default NewsFeedClass;
