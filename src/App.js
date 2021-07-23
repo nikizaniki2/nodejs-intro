@@ -31,6 +31,12 @@ const posts = [
   }
 ]
 
+const user =
+  {
+      "id": 1,
+      "username": "Simo"
+  }
+
 const comments = [
   {
     id: 1,
@@ -88,7 +94,7 @@ async function loadComments () {
 }
 
 // UI for comment. Represent comment data (restapi GET data) to the user.
-function Post ({ data }) {
+function Post ({ data, onDelete}) {
   // request comments for this post from API and display them
   const [comments, setComments] = useState([]);
   const [listed, setListed] = useState(true);
@@ -99,8 +105,10 @@ function Post ({ data }) {
   }, []);
 
   const deletePost = () => {
-    //return axios.delete(`/restapi/post/${data.id}`)
-    setListed(false);
+    onDelete(data.id)
+      .then(() => setListed(false))
+      .catch(() => alert("Failed to delete post."))
+    
   }
 
   return listed ? (
@@ -125,6 +133,7 @@ async function loadPosts () {
   return Promise.resolve(posts)
 }
 
+
 class NewsFeedClass extends React.Component {
   constructor (props) {
     super(props)
@@ -132,20 +141,64 @@ class NewsFeedClass extends React.Component {
       posts: []
     }
   }
-
+  
+  deletePost(post_id){
+    return Promise.resolve()
+    //return axios.delete(post_id)//string
+  }
+  
   // One-time callback after first render
   // Equivalent to useEffect(() => {...}, []);
   componentDidMount() {
     loadPosts()
-      .then(posts => this.setState({posts}))
-      .catch(() => alert('Failed to load posts from API'))
+    .then(posts => this.setState({posts}))
+    .catch(() => alert('Failed to load posts from API'))
   }
-
+  
   render () {
     return <div className="App">
       <header className="App-header">
-        { posts.map(postData => <Post data={postData} />) }
+        <PostCreator></PostCreator>
+        { posts.map(postData => <Post data={postData} onDelete={this.deletePost}/>) }
       </header>
+    </div>
+  }
+}
+
+async function loadUser () {
+  return Promise.resolve(user)
+}
+
+class PostCreator extends React.Component{
+  constructor (props) {
+    super(props)
+    this.state = {
+      user: {}
+    }
+  }
+  componentDidMount() {
+    loadUser()
+      .then(user => this.setState({user}))
+      .catch(() => alert('Failed to load user from API'))
+  }
+
+  createPost () {
+    return Promise.resolve()
+  }
+
+  render () {
+    return <div className="post__creator post__wrapper">
+      <p className="Username text-small">{user.username}</p>
+      <form className="PostContent">
+      {/* https://www.w3schools.com/tags/tag_input.asp */}
+        <label for="title" className="text-small">Title: </label>
+        <input type="text" id="title"></input>
+        <br/>
+        <label for="text" className="text-small">Content: </label>
+        <input type="text" id="title"></input>
+        <br/>
+        <Button onClick={this.createPost} title={'Post'}/>
+      </form>
     </div>
   }
 }
