@@ -2,8 +2,8 @@ import {useState, useEffect} from 'react'
 //import logo from './logo.svg';
 import './App.css';
 import React from 'react'
-// import axios from 'axios';
-  
+import axios from 'axios';
+
   const posts = [
     {
       "id": 10,
@@ -48,8 +48,8 @@ import React from 'react'
   ]
   
   async function loadPosts () {
-    // axios.get('/posts/')
-    return Promise.resolve(posts)
+    return axios.get('http://server.domain.net/restapi/post/', {withCredentials: true})
+    // return Promise.resolve(posts)
   }
   
   async function loadUser () {
@@ -60,7 +60,7 @@ import React from 'react'
     return Promise.resolve(comments)
   }
   
-  
+
   // UI for comment. Represent comment data (restapi GET data) to the user.
 function Post ({ data, onDelete}) {
   // request comments for this post from API and display them
@@ -98,9 +98,14 @@ function Post ({ data, onDelete}) {
 
 class PostCreator extends React.Component{
   constructor (props) {
-    super(props)
+    super(props);
+    this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.handleContentChange = this.handleContentChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
-      user: {}
+      user: {},
+      title: "",
+      content: ""
     }
   }
   componentDidMount() {
@@ -114,9 +119,20 @@ class PostCreator extends React.Component{
   }
   
   handleSubmit(event){
-    event.preventDefault()
-    //console.dir(event.target)
-    //console.log(event.target.elements.title.value)
+    event.preventDefault();
+    const post = {
+      title: this.state.title,
+      content: this.state.content
+    }
+
+    axios.post('http://server.domain.net/post/new/', post, {withCredentials: true})
+  }
+
+  handleTitleChange(event){
+    this.setState({title: event.target.value})
+  }
+  handleContentChange(event){
+    this.setState({content: event.target.value})
   }
   
   render () {
@@ -125,10 +141,10 @@ class PostCreator extends React.Component{
       <form className="PostContent" onSubmit={this.handleSubmit}>
       {/* https://www.w3schools.com/tags/tag_input.asp */}
         <label htmlFor="title" className="text-small">Title: </label>
-        <input type="text" id="title"></input>
+        <input type="text" id="title" onChange={this.handleTitleChange}></input>
         <br/>
         <label htmlFor="content" className="text-small">Content: </label>
-        <input type="text" id="content"></input>
+        <input type="text" id="content" onChange={this.handleContentChange}></input>
         <br/>
         <Button onClick={this.props.action} title={'Post'}/>
       </form>
@@ -216,9 +232,10 @@ function Button ({ title, onClick }) {
 class NewsFeedClass extends React.Component {
   constructor (props) {
     super(props)
-    this.handler = this.handler.bind(this);
+    this.newPostHandler = this.newPostHandler.bind(this);
 
     this.state = {
+      newPost: null,
       posts: []
     };
   }
@@ -232,32 +249,33 @@ class NewsFeedClass extends React.Component {
   // Equivalent to useEffect(() => {...}, []);
   componentDidMount() {
     loadPosts()
-    .then(posts => this.setState({posts}))
+    .then(({data}) => {
+      this.setState({posts: data}, () =>{
+      console.log(posts)
+    })})
     .catch(() => alert('Failed to load posts from API'))
   }
   componentDidUpdate() {
     // console.log(posts)
   }
 
-  async handler(){
-    const postList =     {
-      "id": 10,
-      "title":  "down",
-      "content": "To"
-    }
-    //[...this.state.posts]
-
-    await this.setState({ posts: postList })
-    console.log("updating state");
-    console.log(posts);
+   newPostHandler(title, content){
+     this.setState({
+      newPost: {
+      "title": title,
+      "content": content}
+    })
   }
   
   render () {
     return <div className="App">
       <header className="App-header">
         <NavigationMenu/>
-        <PostCreator action={this.handler} />
-        { posts.map(postData => <Post key={postData.id} data={postData} onDelete={this.deletePost}/>) }
+        <PostCreator action={this.newPostHandler} />
+        {/* {this.state.newPost ? 
+        <Post data={this.state.newPost} key={this.state.newPost.id} onDelete={this.deletePost} /> : 
+        null} */}
+        { this.state.posts.map(postData => <Post key={postData.id} data={postData} onDelete={this.deletePost}/>) }
       </header>
     </div>
   }
