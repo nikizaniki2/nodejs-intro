@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 //import logo from './logo.svg';
 import './App.css';
 import React from 'react'
-import axios from 'axios';
+import axios from './request';
 
   const posts = [
     {
@@ -48,7 +48,7 @@ import axios from 'axios';
   ]
   
   async function loadPosts () {
-    return axios.get('http://server.domain.net/restapi/post/', {withCredentials: true})
+    return axios.get('http://server.domain.net/restapi/post/')
     // return Promise.resolve(posts)
   }
   
@@ -113,11 +113,7 @@ class PostCreator extends React.Component{
     .then(user => this.setState({user}))
     .catch(() => alert('Failed to load user from API'))
   }
-  
-  createPost () {
-    return Promise.resolve()
-  }
-  
+
   handleSubmit(event){
     event.preventDefault();
     const post = {
@@ -125,7 +121,7 @@ class PostCreator extends React.Component{
       content: this.state.content
     }
 
-    axios.post('http://server.domain.net/post/new/', post, {withCredentials: true})
+    axios.post('http://server.domain.net/restapi/post/', post)
   }
 
   handleTitleChange(event){
