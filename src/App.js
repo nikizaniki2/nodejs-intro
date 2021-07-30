@@ -4,23 +4,23 @@ import './App.css';
 import React from 'react'
 import axios from './request';
 
-  const posts = [
-    {
-      "id": 10,
-      "title": "Wikipedia down",
-      "content": "Today there is no more wiki for you"
-    },
-    {
-      "id": 11,
-      "title": "React releases version 17",
-      "content": "Use hooks now"
-    },
-    {
-      "id": 12,
-      "title": "Django",
-      "content": "Django is a framework, React is not"
-    }
-  ]
+  // const posts = [
+  //   {
+  //     "id": 10,
+  //     "title": "Wikipedia down",
+  //     "content": "Today there is no more wiki for you"
+  //   },
+  //   {
+  //     "id": 11,
+  //     "title": "React releases version 17",
+  //     "content": "Use hooks now"
+  //   },
+  //   {
+  //     "id": 12,
+  //     "title": "Django",
+  //     "content": "Django is a framework, React is not"
+  //   }
+  // ]
   
   const user =
   {
@@ -28,24 +28,24 @@ import axios from './request';
     "username": "Simo"
   }
   
-  const comments = [
-    {
-      id: 1,
-      postId: 11,
-      author: {name: "Niki", id: 1 },
-      content: "Nik comment"
-    },  {
-      id: 2,
-      postId: 12,
-      author: {name: "Simo", id: 2 },
-      content: "Simo comment"
-    },  {
-      id: 3,
-      postId: 12,
-      author: {name: "Emo", id: 3 },
-      content: "Emo comment"
-    },
-  ]
+  // const comments = [
+  //   {
+  //     id: 1,
+  //     postId: 11,
+  //     author: {name: "Niki", id: 1 },
+  //     content: "Nik comment"
+  //   },  {
+  //     id: 2,
+  //     postId: 12,
+  //     author: {name: "Simo", id: 2 },
+  //     content: "Simo comment"
+  //   },  {
+  //     id: 3,
+  //     postId: 12,
+  //     author: {name: "Emo", id: 3 },
+  //     content: "Emo comment"
+  //   },
+  // ]
   
   async function loadPosts () {
     return axios.get('http://server.domain.net/restapi/post/')
@@ -56,8 +56,10 @@ import axios from './request';
     return Promise.resolve(user)
   }
   
-  async function loadComments () {
-    return Promise.resolve(comments)
+  async function loadComments (post_id) {
+    const url = 'http://server.domain.net/restapi/post/' + post_id + '/comments'
+    return axios.get(url)
+    // return Promise.resolve(comments)
   }
   
 
@@ -69,7 +71,11 @@ function Post ({ data, onDelete}) {
   //https://dev.to/chilupa/remove-element-from-dom-in-react-way-n2l
   
   useEffect(() => {
-    loadComments().then(comments => setComments(comments))
+    loadComments(data.id)
+    .then(({data}) => {
+      setComments(data.comments)
+    })
+    .catch(() => alert('Failed to load comments from API'))
   }, []);
   
   const deletePost = () => {
@@ -86,9 +92,10 @@ function Post ({ data, onDelete}) {
       <Button onClick={deletePost} title={'Delete post'}/>
       <CommentCreator/>
       <div className='comment__list'>
-      { comments
-        .filter(commentData => commentData.postId === data.id)
-        .map(commentsData => <Comment key={commentsData.id} data={commentsData} />) }
+      { comments ?
+        comments
+        .map(commentData => <Comment key={commentData.id} data={commentData} />)
+      : "Loading..." }
       </div>
     </div>
   )
@@ -122,6 +129,10 @@ class PostCreator extends React.Component{
     }
 
     axios.post('http://server.domain.net/restapi/post/', post)
+    .then((response) => {
+      this.props.addPost(response.data)
+    })
+    .catch(() => alert("Failed to post"))
   }
 
   handleTitleChange(event){
@@ -159,7 +170,7 @@ function Comment ({ data }) {
   
   return listed ? (
     <div className={'comment__wrapper'}>
-    <div className='comment__author'>author: {data.author.name}</div>
+    {/* <div className='comment__author'>author: {data.author.name}</div> */}
     <div className='comment__content'>{data.content}</div>
     <Button onClick={deleteComment} title={'Delete comment'}/>
   </div>
@@ -228,49 +239,41 @@ function Button ({ title, onClick }) {
 class NewsFeedClass extends React.Component {
   constructor (props) {
     super(props)
-    this.newPostHandler = this.newPostHandler.bind(this);
-
+    
     this.state = {
-      newPost: null,
-      posts: []
+      posts: [],
+      comments: []
     };
   }
-  
-  deletePost(post_id){
-    return Promise.resolve()
-    //return axios.delete(post_id)//string
-  }
-  
+
   // One-time callback after first render
   // Equivalent to useEffect(() => {...}, []);
   componentDidMount() {
     loadPosts()
     .then(({data}) => {
       this.setState({posts: data}, () =>{
-      console.log(posts)
     })})
     .catch(() => alert('Failed to load posts from API'))
   }
   componentDidUpdate() {
     // console.log(posts)
   }
+  
+  addPost = newPost =>{
+    this.setState({posts: [newPost, ...this.state.posts]})
+  }
 
-   newPostHandler(title, content){
-     this.setState({
-      newPost: {
-      "title": title,
-      "content": content}
-    })
+  deletePost(post_id){
+    return Promise.resolve()
+    //return axios.delete(post_id)//string
   }
   
+
   render () {
     return <div className="App">
       <header className="App-header">
         <NavigationMenu/>
-        <PostCreator action={this.newPostHandler} />
-        {/* {this.state.newPost ? 
-        <Post data={this.state.newPost} key={this.state.newPost.id} onDelete={this.deletePost} /> : 
-        null} */}
+        <PostCreator addPost={this.addPost}/>
         { this.state.posts.map(postData => <Post key={postData.id} data={postData} onDelete={this.deletePost}/>) }
       </header>
     </div>
