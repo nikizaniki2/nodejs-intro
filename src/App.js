@@ -84,13 +84,16 @@ function Post ({ data, onDelete}) {
     .catch(() => alert("Failed to delete post."))
     
   }
+  const addComment = newComment =>{
+   setComments([newComment, ...comments])
+  }
   
   return listed ? (
     <div className={'post__wrapper'}>
       <div className='post__title'>Title: {data.title}</div>
       <div className='post__content'>{data.content}</div>
       <Button onClick={deletePost} title={'Delete post'}/>
-      <CommentCreator/>
+      <CommentCreator addComment={addComment} postId={data.id}/>
       <div className='comment__list'>
       { comments ?
         comments
@@ -164,8 +167,8 @@ function Comment ({ data }) {
   const [listed, setListed] = useState(true);
   //https://dev.to/chilupa/remove-element-from-dom-in-react-way-n2l
   const deleteComment = () => {
-    //return axios.delete(`/restapi/comment/${data.id}`)
     setListed(false);
+    return axios.delete(`http://server.domain.net/restapi/comment/${data.id}/`)
   }
   
   return listed ? (
@@ -180,19 +183,45 @@ null
 }
 
 class CommentCreator extends React.Component{
-  createComment () {
-    return Promise.resolve()
+  constructor (props) {
+    super(props);
+    this.handleContentChange = this.handleContentChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      user: {},
+      content: ""
+    }
+  }
+  componentDidMount() {
+    loadUser()
+    .then(user => this.setState({user}))
+    .catch(() => alert('Failed to load user from API'))
   }
 
   handleSubmit(event){
-    event.preventDefault()
+    event.preventDefault();
+    const comment = {
+      content: this.state.content,
+      author: this.state.user.id,
+      post: this.props.postId
+    }
+    console.log(this.state.user.id)
+
+    axios.post(`http://server.domain.net/restapi/comment/`, comment)
+    .then((response) => {
+      this.props.addComment(response.data)
+    })
+    .catch(() => alert("Failed to post"))
   }
 
+  handleContentChange(event){
+    this.setState({content: event.target.value})
+  }
   render () {
     return <div className="wrapper">
       <form className="" onSubmit={this.handleSubmit}>
         <label htmlFor="comment" className="text-small">Add Comment: </label>
-        <input type="text" id="comment"></input>
+        <input type="text" id="comment" onChange={this.handleContentChange}></input>
         <br/>
         <Button onClick={this.createComment} title={'Comment'}/>
       </form>
@@ -264,8 +293,8 @@ class NewsFeedClass extends React.Component {
   }
 
   deletePost(post_id){
-    return Promise.resolve()
-    //return axios.delete(post_id)//string
+    // return Promise.resolve()
+    return axios.delete(`http://server.domain.net/restapi/post/${post_id}/`)//string
   }
   
 
