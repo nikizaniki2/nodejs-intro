@@ -15,14 +15,16 @@ function ProfileNav ({ user }) {
     }
 
     return user ? (
-      <div className={'wrapper'}>
-      <div className='comment__content'>{user.username}</div>
+      <div className={'profile__wrapper wrapper'}>
+      <div className='profile__content'>
+        {user.username}
+      </div>
       <Button onClick={profileView} title={'Profile'}/>
       <ProfileView user_id="1"/>
     </div>
   )
   :
-      <div className={'wrapper'}>
+      <div className={'profile__wrapper wrapper'}>
       <Button onClick={loginView} title={'Log In'}/>
       <Button onClick={registerView} title={'Register'}/>
     </div>
