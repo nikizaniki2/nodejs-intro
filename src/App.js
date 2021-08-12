@@ -3,10 +3,10 @@ import './App.css';
 import React from 'react'
 import axios from './request';
 import Post from './Post'
-import { render } from '@testing-library/react';
+import ProfileNav from './Profile'
   
   async function loadUser () {
-    return axios.get('http://server.domain.net/restapi/user/')
+    return axios.get('http://server.domain.net/restapi/user/current')
   }
 
   async function loadPosts () {
@@ -75,22 +75,37 @@ class NewsFeedClass extends React.Component {
     
     this.state = {
       posts: [],
-      user: null
+      user: null,
+      auth: true
     };
   }
 
   componentDidMount() {
+    loadUser()
+      .then(({data}) => {
+        this.setState({user: data}, () =>{
+      })})
+    .catch((error) => {
+      if(error.response.status === 403){
+        this.setState({auth: false}, () =>{})
+      }
+      else{
+        alert('Failed to load user from API');
+      }
+    });
+    
     loadPosts()
     .then(({data}) => {
       this.setState({posts: data}, () =>{
     })})
-    .catch(() => alert('Failed to load posts from API'))
-
-    loadUser()
-      .then(({data}) => {
-        this.setState({user: data[0]}, () =>{
-      })})
-    .catch(() => alert('Failed to load user from API'))
+    .catch((error) => {
+      if(error.response.status === 403){
+        this.setState({auth: false}, () =>{})
+      }
+      else{
+        alert('Failed to load posts from API');
+      }
+    });
   }
 
   addPost = newPost =>{
@@ -100,19 +115,29 @@ class NewsFeedClass extends React.Component {
   deletePost(post_id){
     return axios.delete(`http://server.domain.net/restapi/post/${post_id}/`)
   }
-  
+
+  //User load wait can probably be done better using a dependency?
   render () {
     return this.state.user ?
     <div className="App">
       <header className="App-header">
+        <ProfileNav user={this.state.user}/>
         <PostCreator addPost={this.addPost} user={this.state.user}/>
         { this.state.posts.map(postData => <Post key={postData.id} data={postData} onDelete={this.deletePost} user={this.state.user}/>) }
       </header>
     </div>
-    :
-    <div>
-      <p>Loading User...</p>
+    : this.state.auth ?
+    <div className="App">
+      <header className="App-header">
+      <p>Loading User</p>
+      </header>
     </div>
+    :
+    <div className="App">
+    <header className="App-header">
+    <ProfileNav/>
+    </header>
+  </div>
   }
 }
 
