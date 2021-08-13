@@ -1,6 +1,6 @@
 import '../App.css';
 import React from 'react'
-import {loadUser ,Button} from '../App'
+import {loadUserByID ,Button} from '../App'
 import {useState, useEffect} from 'react'
 import axios from '../request';
 import Post from './Post'
@@ -13,16 +13,12 @@ function ProfileNav () {
   const { user_id } = useParams();
    
   useEffect(() => {
-    loadUserByID()
+    loadUserByID(user_id)
     .then(({data}) => {
       setUser(data)
     })
     .catch(() => alert('Failed to load user from API'))
   }, []);
-  
-  async function loadUserByID () {
-    return axios.get(`http://server.domain.net/restapi/user/${user_id}/`)
-  }
   
   const profileView = () => {
    }

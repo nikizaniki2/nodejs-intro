@@ -11,6 +11,10 @@ import NavBar from './components/NavBar'
     return axios.get('http://server.domain.net/restapi/user/current')
   }
 
+  async function loadUserByID (user_id) {
+    return axios.get(`http://server.domain.net/restapi/user/${user_id}/`)
+  }
+
   async function loadPosts () {
     return axios.get('http://server.domain.net/restapi/post/')
   }
@@ -45,5 +49,6 @@ export default App;
 export {
   Button,
   loadUser,
+  loadUserByID,
   loadPosts,
 }
