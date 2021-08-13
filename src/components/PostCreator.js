@@ -1,7 +1,7 @@
-import './App.css';
+import '../App.css';
 import React from 'react'
-import axios from './request';
-import {Button} from './App'
+import axios from '../request';
+import {Button} from '../App'
 
 class PostCreator extends React.Component{
     constructor (props) {

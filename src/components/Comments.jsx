@@ -1,8 +1,8 @@
 import {useState} from 'react'
-import './App.css';
+import '../App.css';
 import React from 'react'
-import axios from './request';
-import {Button} from './App'
+import axios from '../request';
+import {Button} from '../App'
 
   function Comment ({ data }) {
     const [listed, setListed] = useState(true);
@@ -14,7 +14,7 @@ import {Button} from './App'
     
     return listed ? (
       <div className={'comment__wrapper'}>
-      {/* <div className='comment__author'>author: {data.author.name}</div> */}
+      <div className='comment__author'>author: {data.author.username}</div>
       <div className='comment__content'>{data.content}</div>
       <Button onClick={deleteComment} title={'Delete comment'}/>
     </div>

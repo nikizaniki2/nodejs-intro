@@ -1,9 +1,10 @@
 import {useState, useEffect} from 'react'
-import './App.css';
+import '../App.css';
 import React from 'react'
-import axios from './request';
+import axios from '../request';
 import Comment from './Comments'
-import {Button} from './App'
+import {Button} from '../App'
+import { NavLink } from "react-router-dom";
 
   async function loadComments (post_id) {
     const url = 'http://server.domain.net/restapi/post/' + post_id + '/comments'
@@ -34,6 +35,9 @@ import {Button} from './App'
     
     return listed ? (
       <div className={'post__wrapper'}>
+        <div className='post__author'>
+        Author: <NavLink to={'/profile/' + user.id  + '/'}>{user.username}</NavLink>
+          </div>
         <div className='post__title'>Title: {data.title}</div>
         <div className='post__content'>{data.content}</div>
         <Button onClick={deletePost} title={'Delete post'}/>

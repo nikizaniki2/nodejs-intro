@@ -2,8 +2,11 @@
 import './App.css';
 import React from 'react'
 import axios from './request';
-import NewsFeedClass from './NewsFeed'
-  
+import NewsFeedClass from './components/NewsFeed'
+import ProfileNav from './components/Profile'
+import { HashRouter, Switch, Route } from "react-router-dom";
+import NavBar from './components/NavBar'
+
   async function loadUser () {
     return axios.get('http://server.domain.net/restapi/user/current')
   }
@@ -18,6 +21,9 @@ function Button ({ title, onClick }) {
     )
   }
 
+  // https://blog.pusher.com/getting-started-with-react-router-v4/
+  // http://www.hackingwithreact.com/read/1/24/making-custom-urls-with-react-router-params
+
 const App = () => (
   <div className='App'>
     <Main />
@@ -25,7 +31,13 @@ const App = () => (
 );
 
 const Main = () => (
-  <NewsFeedClass/>
+  <div className='Main'>
+      <NavBar></NavBar>
+      <Switch>
+        <Route exact path="/" component={NewsFeedClass}/>
+        <Route path="/profile/:user_id" component={ProfileNav}/>
+      </Switch>
+  </div>
 );
 
 export default App;

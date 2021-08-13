@@ -1,9 +1,9 @@
 import React from 'react'
-import axios from './request';
+import axios from '../request';
 import Post from './Post'
 import ProfileNav from './Profile'
 import PostCreator from './PostCreator';
-import {loadPosts, loadUser} from './App'
+import {loadPosts, loadUser} from '../App'
 
 class NewsFeedClass extends React.Component {
     constructor (props) {
@@ -57,9 +57,10 @@ class NewsFeedClass extends React.Component {
       return this.state.user ?
       <div className="NewsFeed">
         <header className="App-header">
-          <ProfileNav user={this.state.user}/>
           <PostCreator addPost={this.addPost} user={this.state.user}/>
+          <div className="posts__wrapper wrapper">
           { this.state.posts.map(postData => <Post key={postData.id} data={postData} onDelete={this.deletePost} user={this.state.user}/>) }
+          </div>
         </header>
       </div>
       : this.state.auth ?
