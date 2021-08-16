@@ -18,7 +18,7 @@ import { NavLink } from "react-router-dom";
     useEffect(() => {
       loadComments(data.id)
       .then(({data}) => {
-        setComments(data.comments)
+        setComments(data)
       })
       .catch(() => alert('Failed to load comments from API'))
     }, []);

@@ -17,11 +17,7 @@ import { loadUserByID } from '../App'
     }
     
     useEffect(() => {
-      loadUserByID(data.author)
-      .then((user) => {
-        setAuthor(user.data)
-      })
-      .catch(() => alert('Failed to load comments from API'))
+        setAuthor(data.author)
     }, []);
 
     return author ? (
@@ -33,7 +29,7 @@ import { loadUserByID } from '../App'
 
       <div className={'comment__wrapper'}>
       <div className='comment__author'>
-      Author: <NavLink to={'/profile/' + data.author + '/'}>{author.username}</NavLink>
+      Author: <NavLink to={'/profile/' + author.id + '/'}>{author.username}</NavLink>
         {/* author: {data.author.username} */}
         </div>
       <div className='comment__content'>{data.content}</div>
