@@ -1,26 +1,14 @@
 import React from 'react'
 import { NavLink } from "react-router-dom";
-import { loadUser } from '../App'
-import {useState, useEffect} from 'react'
 
-function Navbar() {
-
-    const [user, setUser] = useState(null);
+function Navbar(props) {
     
-    useEffect(() => {
-        loadUser()
-        .then(({data}) => {
-          setUser(data)
-        })
-        .catch(() => alert('Failed to load user from API'))
-      }, []);
-    
-    return user ? (
+    return props.user ? (
         <div className="navbar">
             <h1>Navbar</h1>
             <ul>
                 <li><NavLink exact to="/">Home</NavLink></li>
-                <li><NavLink to={'/profile/' + user.id  + '/'}>Profile</NavLink></li>
+                <li><NavLink to={'/profile/' + props.user.id  + '/'}>Profile</NavLink></li>
             </ul>
         </div>
     )

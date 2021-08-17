@@ -4,8 +4,9 @@ import React from 'react'
 import axios from './request';
 import NewsFeedClass from './components/NewsFeed'
 import ProfileNav from './components/Profile'
-import { HashRouter, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import NavBar from './components/NavBar'
+import {useState, useEffect} from 'react'
 
   async function loadUser () {
     return axios.get('http://server.domain.net/restapi/user/current')
@@ -34,16 +35,37 @@ const App = () => (
   </div>
 );
 
-const Main = () => (
-  <div className='Main'>
-      <NavBar></NavBar>
-      <Switch>
-        <Route exact path="/" component={NewsFeedClass}/>
-        <Route path="/profile/:user_id" component={ProfileNav}/>
-      </Switch>
-  </div>
-);
+const Main = () => { 
+  const [user, setUser] = useState();
+  
+  //User (/current) is now only loaded once (in Main)
+  useEffect(() => {
+      loadUser()
+      .then(({data}) => {
+        setUser(data);
+      })
+      .catch((error) => {
+        if(error.response.status === 403){
+          setUser(null);
+        }
+        else alert('Failed to load user from API');
+      })
+    }, []);
 
+    if(!user){
+      return (<div className='Main'>Loading User...</div>);
+  }
+  
+    return (
+    <div className='Main'>
+        <NavBar user={user}></NavBar>
+        <Switch>
+          <Route exact path="/" render={(props) => (<NewsFeedClass {...props} user={user}/>)}/>
+          <Route path="/profile/:user_id" component={ProfileNav}/>
+        </Switch>
+    </div>
+  );
+}
 export default App;
 
 export {

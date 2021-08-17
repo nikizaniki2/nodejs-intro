@@ -1,47 +1,24 @@
 import React from 'react'
 import axios from '../request';
 import Post from './Post'
-import ProfileNav from './Profile'
 import PostCreator from './PostCreator';
-import {loadPosts, loadUser} from '../App'
+import {loadPosts} from '../App'
 
 class NewsFeedClass extends React.Component {
     constructor (props) {
-      super(props)
+      super(props);
       
       this.state = {
-        posts: [],
-        user: null,
-        auth: true
+        posts: []
       };
     }
   
     componentDidMount() {
-      loadUser()
-        .then(({data}) => {
-          this.setState({user: data}, () =>{
-        })})
-      .catch((error) => {
-        if(error.response.status === 403){
-          this.setState({auth: false}, () =>{})
-        }
-        else{
-          alert('Failed to load user from API');
-        }
-      });
-      
       loadPosts()
       .then(({data}) => {
         this.setState({posts: data}, () =>{
       })})
-      .catch((error) => {
-        if(error.response.status === 403){
-          this.setState({auth: false}, () =>{})
-        }
-        else{
-          alert('Failed to load posts from API');
-        }
-      });
+      .catch(() => alert('Failed to load Posts from API'));
     }
   
     addPost = newPost =>{
@@ -54,27 +31,15 @@ class NewsFeedClass extends React.Component {
   
     //User load wait can probably be done better using a dependency?
     render () {
-      return this.state.user ?
+      return (
       <div className="NewsFeed">
         <header className="App-header">
-          <PostCreator addPost={this.addPost} user={this.state.user}/>
+          <PostCreator addPost={this.addPost} user={this.props.user}/>
           <div className="posts__wrapper wrapper">
-          { this.state.posts.map(postData => <Post key={postData.id} data={postData} onDelete={this.deletePost} user={this.state.user}/>) }
+          { this.state.posts.map(postData => <Post key={postData.id} data={postData} onDelete={this.deletePost} user={this.props.user}/>) }
           </div>
         </header>
-      </div>
-      : this.state.auth ?
-      <div className="NewsFeed">
-        <header className="App-header">
-        <p>Loading User</p>
-        </header>
-      </div>
-      :
-      <div className="NewsFeed">
-      <header className="App-header">
-      <ProfileNav/>
-      </header>
-    </div>
+      </div>)
     }
   }
 

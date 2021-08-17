@@ -6,6 +6,7 @@ import {Button} from '../App'
 class PostCreator extends React.Component{
     constructor (props) {
       super(props);
+
       this.handleTitleChange = this.handleTitleChange.bind(this);
       this.handleContentChange = this.handleContentChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);

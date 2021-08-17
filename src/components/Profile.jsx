@@ -5,7 +5,6 @@ import {useState, useEffect} from 'react'
 import axios from '../request';
 import Post from './Post'
 import { useParams } from "react-router";
-import PostCreator from './PostCreator';
 
 function ProfileNav () {
 

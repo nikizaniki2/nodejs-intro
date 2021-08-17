@@ -4,7 +4,6 @@ import React from 'react'
 import axios from '../request';
 import {Button} from '../App'
 import { NavLink } from "react-router-dom";
-import { loadUserByID } from '../App'
 
   function Comment ({ data }) {
     const [listed, setListed] = useState(true);
@@ -19,7 +18,9 @@ import { loadUserByID } from '../App'
     useEffect(() => {
         setAuthor(data.author)
     }, []);
-
+    if(!listed){
+      return null
+    }
     return author ? (
       
       //TODO: backend returns just the id of the author
