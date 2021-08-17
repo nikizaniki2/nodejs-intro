@@ -16,8 +16,8 @@ function Navbar(props) {
     (        <div className="navbar">
     <h1>Navbar</h1>
     <ul>
-        <li><NavLink exact to="/">Home</NavLink></li>
-        <li><NavLink to='#'>Profile</NavLink></li>
+        <li><NavLink to='/login'>Login</NavLink></li>
+        <li><NavLink to="/register">Register</NavLink></li>
     </ul>
 </div>)
 }

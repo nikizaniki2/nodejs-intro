@@ -52,19 +52,31 @@ const Main = () => {
       })
     }, []);
 
-    if(!user){
-      return (<div className='Main'>Loading User...</div>);
+      if(user === null){
+        return(
+        <div className='Main'>
+          <NavBar></NavBar>
+          <Switch>
+            <Route path="/login" render={ () => (<div>PLACEHOLDER</div>)}/>
+            <Route path="/register" render={ () => (<div>PLACEHOLDER</div>)}/>
+          </Switch>
+      </div>
+        )
+      }
+
+      if(user){
+        return (
+          <div className='Main'>
+          <NavBar user={user}></NavBar>
+          <Switch>
+            <Route exact path="/" render={(props) => (<NewsFeedClass {...props} user={user}/>)}/>
+            <Route path="/profile/:user_id" component={ProfileNav}/>
+          </Switch>
+      </div>
+    );
   }
-  
-    return (
-    <div className='Main'>
-        <NavBar user={user}></NavBar>
-        <Switch>
-          <Route exact path="/" render={(props) => (<NewsFeedClass {...props} user={user}/>)}/>
-          <Route path="/profile/:user_id" component={ProfileNav}/>
-        </Switch>
-    </div>
-  );
+
+  return (<div className='Main'>Loading User...</div>);
 }
 export default App;
 
