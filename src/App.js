@@ -3,7 +3,7 @@ import './App.css';
 import React from 'react'
 import axios from './request';
 import NewsFeedClass from './components/NewsFeed'
-import ProfileNav from './components/Profile'
+import ProfileView from './components/Profile'
 import { Switch, Route } from "react-router-dom";
 import NavBar from './components/NavBar'
 import {useState, useEffect} from 'react'
@@ -18,6 +18,14 @@ import {useState, useEffect} from 'react'
 
   async function loadPosts () {
     return axios.get('http://server.domain.net/restapi/post/')
+  }
+
+  async function deletePost(post_id){
+    return axios.delete(`http://server.domain.net/restapi/post/${post_id}/`)
+  }
+
+  async function loadUserPosts (user_id) {
+    return axios.get(`http://server.domain.net/restapi/user/${user_id}/posts`)
   }
   
 function Button ({ title, onClick }) {
@@ -70,7 +78,7 @@ const Main = () => {
           <NavBar user={user}></NavBar>
           <Switch>
             <Route exact path="/" render={(props) => (<NewsFeedClass {...props} user={user}/>)}/>
-            <Route path="/profile/:user_id" component={ProfileNav}/>
+            <Route path="/profile/:user_id" render={(props) => (<ProfileView {...props} curr_user={user}/>)}/>
           </Switch>
       </div>
     );
@@ -84,5 +92,7 @@ export {
   Button,
   loadUser,
   loadUserByID,
+  loadUserPosts,
   loadPosts,
+  deletePost,
 }

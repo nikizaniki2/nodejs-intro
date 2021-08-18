@@ -1,69 +1,55 @@
 import '../App.css';
 import React from 'react'
-import {loadUserByID ,Button} from '../App'
+import {loadUserByID} from '../App'
 import {useState, useEffect} from 'react'
-import axios from '../request';
 import Post from './Post'
 import { useParams } from "react-router";
+import { deletePost, loadUserPosts } from '../App'
+import PostCreator from './PostCreator';
 
-function ProfileNav () {
-
+function ProfileView({curr_user}){
+  const [posts, setPosts] = useState([]);
   const [user, setUser] = useState();
   const { user_id } = useParams();
-   
-  useEffect(() => {
-    loadUserByID(user_id)
-    .then(({data}) => {
-      setUser(data)
-    })
-    .catch(() => alert('Failed to load user from API'))
-  }, []);
-  
-  const profileView = () => {
-   }
-  const loginView = () => {
-   }
-  const registerView = () => {
-   }
 
-    return user ? (
-      <div className={'profile__wrapper wrapper'}>
-      <div className='profile__content'>
-        {user.username}
-      </div>
-      <Button onClick={profileView} title={'Profile'}/>
-      <ProfileView user={user}/>
-    </div>
-  )
-  :
-      <div className={'profile__wrapper wrapper'}>
-      <Button onClick={loginView} title={'Log In'}/>
-      <Button onClick={registerView} title={'Register'}/>
-    </div>
-  }
+  const [ isOwner, setIsOwner ] = useState(false);
   
-  function ProfileView({user}){
-    const [posts, setPosts] = useState([]);
 
     useEffect(() => {
-      loadUserPosts(user.id)
+      loadUserByID(user_id)
+      .then(({data}) => {
+        setUser(data);
+        if(Number(curr_user.id) === Number(user_id)) setIsOwner(true);
+      })
+      .catch(() => alert('Failed to load user from API'))
+      
+      loadUserPosts(Number(user_id))
       .then(({data}) => {
         setPosts(data.posts)
       })
-      .catch(() => alert('Failed to load posts from API'))
-    }, [user]);
+      .catch((error) => console.log(error))
+    }, []);
 
-    async function loadUserPosts () {
-      return axios.get(`http://server.domain.net/restapi/user/${user.id}/posts`)
-    }
-    async function deletePost(post_id){
-      return axios.delete(`http://server.domain.net/restapi/post/${post_id}/`)
-    }
     
-    return(posts.map(postData => <Post key={postData.id} data={postData} onDelete={deletePost} user={user}/>))
+    
+    return (
+      <div className={'profile__wrapper wrapper'}>
+      <div className='profile__content'>
+        {user ? 
+        user.username
+      :
+      "Loading user..."}
+      </div>
+      {isOwner ?
+       <PostCreator user={user}/>
+      : null
+      }
+      { posts.map(postData => <Post key={postData.id} data={postData} onDelete={deletePost} user={user}/>) }
+      </div>
+    )
   }
   
-  export default ProfileNav;
+  export default ProfileView;
   export {
     ProfileView,
 }

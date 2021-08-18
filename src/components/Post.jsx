@@ -36,7 +36,7 @@ import { NavLink } from "react-router-dom";
     return listed ? (
       <div className={'post__wrapper'}>
         <div className='post__author'>
-        Author: <NavLink to={'/profile/' + user.id  + '/'}>{user.username}</NavLink>
+        Author: <NavLink to={'/profile/' + data.author.id  + '/'}>{data.author.username}</NavLink>
           </div>
         <div className='post__title'>Title: {data.title}</div>
         <div className='post__content'>{data.content}</div>

@@ -1,8 +1,7 @@
 import React from 'react'
-import axios from '../request';
 import Post from './Post'
 import PostCreator from './PostCreator';
-import {loadPosts} from '../App'
+import { loadPosts , deletePost } from '../App'
 
 class NewsFeedClass extends React.Component {
     constructor (props) {
@@ -25,9 +24,7 @@ class NewsFeedClass extends React.Component {
       this.setState({posts: [newPost, ...this.state.posts]})
     }
   
-    deletePost(post_id){
-      return axios.delete(`http://server.domain.net/restapi/post/${post_id}/`)
-    }
+
   
     //User load wait can probably be done better using a dependency?
     render () {
@@ -36,7 +33,7 @@ class NewsFeedClass extends React.Component {
         <header className="App-header">
           <PostCreator addPost={this.addPost} user={this.props.user}/>
           <div className="posts__wrapper wrapper">
-          { this.state.posts.map(postData => <Post key={postData.id} data={postData} onDelete={this.deletePost} user={this.props.user}/>) }
+          { this.state.posts.map(postData => <Post key={postData.id} data={postData} onDelete={deletePost} user={this.props.user}/>) }
           </div>
         </header>
       </div>)
