@@ -25,9 +25,9 @@ function ProfileView({curr_user}){
       
       loadUserPosts(Number(user_id))
       .then(({data}) => {
-        setPosts(data.posts)
+        setPosts(data);
       })
-      .catch((error) => console.log(error))
+      .catch((error) => alert('Failed to load user from API erro: ' + error))
     }, []);
 
     

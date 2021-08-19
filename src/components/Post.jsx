@@ -18,7 +18,7 @@ import { NavLink } from "react-router-dom";
     useEffect(() => {
       loadComments(data.id)
       .then(({data}) => {
-        setComments(data)
+        setComments(data);
       })
       .catch(() => alert('Failed to load comments from API'))
     }, []);
@@ -68,7 +68,6 @@ import { NavLink } from "react-router-dom";
       event.preventDefault();
       const comment = {
         content: this.state.content,
-        author: this.props.user.id,
         post: this.props.postId
       }
   

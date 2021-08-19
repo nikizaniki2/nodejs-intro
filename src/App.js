@@ -16,8 +16,11 @@ import {useState, useEffect} from 'react'
     return axios.get(`http://server.domain.net/restapi/user/${user_id}/`)
   }
 
-  async function loadPosts () {
-    return axios.get('http://server.domain.net/restapi/post/')
+  async function loadPosts (page_url=null) {
+    if(page_url){
+      return axios.get(page_url)
+    }
+    return axios.get(`http://server.domain.net/restapi/post/`)
   }
 
   async function deletePost(post_id){
