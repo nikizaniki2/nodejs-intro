@@ -4,18 +4,18 @@ import {loadUserByID} from '../App'
 import {useState, useEffect} from 'react'
 import Post from './Post'
 import { useParams } from "react-router";
-import { deletePost, loadUserPosts } from '../App'
+import { deletePost, loadUserPosts, Button } from '../App'
 import PostCreator from './PostCreator';
 
 function ProfileView({curr_user}){
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState();
-  const { user_id } = useParams();
-
+  const [paginator, setPaginator] = useState();
   const [ isOwner, setIsOwner ] = useState(false);
   
+  const { user_id } = useParams();
 
-    useEffect(() => {
+  useEffect(() => {
       loadUserByID(user_id)
       .then(({data}) => {
         setUser(data);
@@ -25,13 +25,24 @@ function ProfileView({curr_user}){
       
       loadUserPosts(Number(user_id))
       .then(({data}) => {
-        setPosts(data);
+        setPaginator(data);
+        setPosts(data.results);
       })
       .catch((error) => alert('Failed to load user from API erro: ' + error))
     }, []);
 
-    
-    
+    function requestMorePosts(){
+      if(paginator.next){
+        loadUserPosts(Number(user_id), paginator.next)
+        .then(({data}) => {
+          setPaginator({paginator: data})
+          setPosts([...posts, ...data.results])
+      })
+        .catch(() => alert('Failed to load Posts from API'));
+      }
+    }
+
+    if(paginator){
     return (
       <div className={'profile__wrapper wrapper'}>
       <div className='profile__content'>
@@ -45,8 +56,13 @@ function ProfileView({curr_user}){
       : null
       }
       { posts.map(postData => <Post key={postData.id} data={postData} onDelete={deletePost} user={user}/>) }
+      {paginator.next ?
+        <Button title="Load More" onClick={requestMorePosts}/>
+        :
+        null}
       </div>
-    )
+    )}
+    return null
   }
   
   export default ProfileView;

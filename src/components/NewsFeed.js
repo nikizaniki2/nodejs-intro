@@ -31,7 +31,6 @@ class NewsFeedClass extends React.Component {
 
     requestMorePosts(){
       if(this.state.paginator.next){
-        // alert("Next page: " + this.state.paginator.next)
         loadPosts(this.state.paginator.next)
         .then(({data}) => {
           this.setState({paginator: data}, () =>{})
