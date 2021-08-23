@@ -14,7 +14,12 @@ function ProfileView({curr_user}){
   const [ isOwner, setIsOwner ] = useState(false);
   
   const { user_id } = useParams();
-
+   
+  function addPosts ({data}){
+      setPaginator(data);
+      setPosts([...posts, ...data.results]);
+    }
+  
   useEffect(() => {
       loadUserByID(user_id)
       .then(({data}) => {
@@ -24,20 +29,14 @@ function ProfileView({curr_user}){
       .catch(() => alert('Failed to load user from API'))
       
       loadUserPosts(Number(user_id))
-      .then(({data}) => {
-        setPaginator(data);
-        setPosts(data.results);
-      })
+      .then(addPosts)
       .catch((error) => alert('Failed to load user from API erro: ' + error))
     }, []);
 
     function requestMorePosts(){
       if(paginator.next){
         loadUserPosts(Number(user_id), paginator.next)
-        .then(({data}) => {
-          setPaginator({paginator: data})
-          setPosts([...posts, ...data.results])
-      })
+        .then(addPosts)
         .catch(() => alert('Failed to load Posts from API'));
       }
     }
