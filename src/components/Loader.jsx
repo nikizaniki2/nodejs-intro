@@ -1,14 +1,19 @@
 import '../App.css';
-import React from 'react'
-import {Button} from '../App'
-
+import React from 'react';
+import PropTypes from 'prop-types';
+import {Button} from '../App';
 // Currently not in use (here if we decide to implement infinite loading)
 
 function Loader (props) {
-    return (
-      <div className={'loader'}>
-          <Button title="Load More" onClick={props.loadMore}/>
-      </div>
-  )
+  return (
+    <div className={'loader'}>
+      <Button title='Load More' onClick={props.loadMore}/>
+    </div>
+  );
 }
-  export default Loader;
+
+Loader.propTypes = {
+  loadMore: PropTypes.func
+};
+
+export default Loader;

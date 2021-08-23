@@ -21,8 +21,72 @@
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
-    ]
+      "react-app/jest",
+      "eslint:recommended"
+    ],
+    "rules": {
+      "indent": [
+        "error",
+        2
+      ],
+      "semi": [
+        "error",
+        "always"
+      ],
+      "camelcase": [
+        0,
+        {
+          "properties": "never"
+        }
+      ],
+      "handle-callback-err": [
+        "error",
+        "never"
+      ],
+      "import/no-anonymous-default-export": [
+        0
+      ],
+      "no-trailing-spaces": "error",
+      "jsx-quotes": [
+        "error",
+        "prefer-single"
+      ],
+      "react/prop-types": [
+        2,
+        {
+          "ignore": [
+            "children"
+          ]
+        }
+      ],
+      "react/jsx-indent": [
+        "error",
+        2
+      ],
+      "react/jsx-indent-props": [
+        0
+      ],
+      "react/jsx-tag-spacing": [
+        0
+      ],
+      "react/jsx-curly-spacing": [
+        0,
+        {
+          "when": "always"
+        }
+      ],
+      "react/jsx-boolean-value": [
+        0,
+        {
+          "never": [
+            "personal"
+          ]
+        }
+      ],
+      "react/display-name": [
+        0
+      ]
+    }
   },
   "browserslist": {
     "production": [
