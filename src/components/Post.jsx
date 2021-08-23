@@ -6,7 +6,10 @@ import Comment from './Comments'
 import {Button} from '../App'
 import { NavLink } from "react-router-dom";
 
-  async function loadComments (post_id) {
+  async function loadComments (post_id, page_url=null) {
+    if(page_url){
+      return axios.get(page_url)
+    }
     const url = 'http://server.domain.net/restapi/post/' + post_id + '/comments'
     return axios.get(url)
   }
@@ -14,11 +17,13 @@ import { NavLink } from "react-router-dom";
   function Post ({ data, onDelete, user}) {
     const [comments, setComments] = useState([]);
     const [listed, setListed] = useState(true);
-    
+    const [paginator, setPaginator] = useState();
+     
     useEffect(() => {
       loadComments(data.id)
       .then(({data}) => {
-        setComments(data);
+        setPaginator(data);
+        setComments(data.results);
       })
       .catch(() => alert('Failed to load comments from API'))
     }, []);
@@ -29,10 +34,20 @@ import { NavLink } from "react-router-dom";
       .catch(() => alert("Failed to delete post."))
       
     }
-    const addComment = newComment =>{
-     setComments([newComment, ...comments])
+    function addComment ({data}){
+        setPaginator(data);
+        setComments([...comments, ...data.results])
+      }
+      
+    function requestMoreComments(){
+      if(paginator.next){
+        loadComments(data.id, paginator.next)
+        .then(addComment)
+        .catch(() => alert('Failed to load Posts from API'));
+      }
     }
     
+    if(paginator){
     return listed ? (
       <div className={'post__wrapper'}>
         <div className='post__author'>
@@ -47,11 +62,17 @@ import { NavLink } from "react-router-dom";
           comments
           .map(commentData => <Comment key={commentData.id} data={commentData}/>)
         : "Loading..." }
+
+        {paginator.next ?
+        <Button title="Load More" onClick={requestMoreComments}/>
+        :
+        null}
         </div>
       </div>
     )
     :
-    null
+    null}
+    return null
   }
 
   class CommentCreator extends React.Component{
