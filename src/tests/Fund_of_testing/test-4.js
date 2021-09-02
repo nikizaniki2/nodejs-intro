@@ -1,8 +1,21 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom';
+const sum = (a, b) => a + b;
+const subtract = (a, b) => a - b;
+
+let result, expected;
+
+function sumTest(){
+  result = sum(3, 7);
+  expected = 10;
+  expect(result).toBe(expected);
+}
+test('Sum test', sumTest);
+
+function subtractTest(){
+  result = subtract(7, 3);
+  expected = 4;
+  expect(result).toBe(expected);
+}
+test('Subtract test', subtractTest);
 
 async function test(title, callback){
   try{
@@ -13,6 +26,7 @@ async function test(title, callback){
   }
 }
 
+
 function expect(actual) {
   return {
     toBe(expected) {
@@ -22,6 +36,3 @@ function expect(actual) {
     }
   };
 }
-
-global.test = test;
-global.expect = expect;
