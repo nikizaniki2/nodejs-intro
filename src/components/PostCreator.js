@@ -1,8 +1,8 @@
 import '../App.css';
 import React from 'react';
 import PropTypes from 'prop-types';
-import axios from '../request';
 import {Button} from '../App';
+import {PostCreatorAPI} from './ApiCalls';
 
 class PostCreator extends React.Component{
   constructor (props) {
@@ -23,12 +23,7 @@ class PostCreator extends React.Component{
       title: this.state.title,
       content: this.state.content
     };
-
-    axios.post('http://server.domain.net/restapi/post/', post)
-      .then((response) => {
-        this.props.addPost(response.data);
-      })
-      .catch(() => alert("Failed to post"));
+    PostCreatorAPI(post);
   }
 
   handleTitleChange(event){

@@ -126,3 +126,4 @@ CommentCreator.propTypes = {
 };
 
 export default Post;
+export {CommentCreator};
