@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "react": "^17.0.2",
@@ -101,6 +100,8 @@
     ]
   },
   "devDependencies": {
-    "axios": "^0.21.1"
+    "@testing-library/jest-dom": "^5.14.1",
+    "axios": "^0.21.1",
+    "kcd-scripts": "^11.2.0"
   }
 }
