@@ -1,4 +1,3 @@
-//import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -104,6 +103,7 @@ Button.propTypes = {
 export default App;
 
 export {
+  Main,
   Button,
   loadUser,
   loadUserByID,
