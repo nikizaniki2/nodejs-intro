@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import axios from '../request';
 import Comment from './Comments';
-import {Button} from '../App';
+import {Button} from '../components/Button';
 import { NavLink } from "react-router-dom";
 
 async function loadComments (post_id, page_url=null) {
@@ -48,32 +48,30 @@ function Post ({ data, onDelete, user}) {
     }
   }
 
-  if(paginator){
-    return listed ? (
-      <div className={'post__wrapper'}>
-        <div className='post__author'>
-          Author: <NavLink to={'/profile/' + data.author.id  + '/'}>{data.author.username}</NavLink>
-        </div>
-        <div className='post__title'>Title: {data.title}</div>
-        <div className='post__content'>{data.content}</div>
-        <Button onClick={deletePost} title={'Delete post'}/>
-        <CommentCreator addComment={addComment} postId={data.id}  user={user}/>
-        <div className='comment__list'>
-          { comments ?
-            comments
-              .map(commentData => <Comment key={commentData.id} data={commentData}/>)
-            : "Loading..." }
-
-          {paginator.next ?
-            <Button title='Load More' onClick={requestMoreComments}/>
-            :
-            null}
-        </div>
+  return (listed && paginator) ? (
+    <div className={'post__wrapper'}>
+      <div className='post__author'>
+        Author: <NavLink to={'/profile/' + data.author.id  + '/'}>{data.author.username}</NavLink>
       </div>
-    )
-      :
-      null;}
-  return null;
+      <div className='post__title'>Title: {data.title}</div>
+      <div className='post__content'>{data.content}</div>
+      <Button onClick={deletePost} title={'Delete post'}/>
+      <CommentCreator addComment={addComment} postId={data.id}  user={user}/>
+      <div className='comment__list'>
+        { comments ?
+          comments
+            .map(commentData => <Comment key={commentData.id} data={commentData}/>)
+          : "Loading..." }
+
+        {paginator.next ?
+          <Button title='Load More' onClick={requestMoreComments}/>
+          :
+          null}
+      </div>
+    </div>
+  )
+    :
+    null;
 }
 
 class CommentCreator extends React.Component{
@@ -126,4 +124,4 @@ CommentCreator.propTypes = {
 };
 
 export default Post;
-export {CommentCreator};
+export {CommentCreator, loadComments};

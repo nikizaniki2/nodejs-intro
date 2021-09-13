@@ -5,8 +5,9 @@ import {loadUserByID} from '../App';
 import {useState, useEffect} from 'react';
 import Post from './Post';
 import { useParams } from "react-router";
-import { deletePost, loadUserPosts, Button } from '../App';
+import { deletePost, loadUserPosts } from '../App';
 import PostCreator from './PostCreator';
+import {Button} from './Button';
 
 function ProfileView({curr_user}){
   const [posts, setPosts] = useState([]);

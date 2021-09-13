@@ -1,7 +1,7 @@
 import '../App.css';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Button} from '../App';
+import {Button} from '../components/Button';
 import {PostCreatorAPI} from './ApiCalls';
 
 class PostCreator extends React.Component{
@@ -44,7 +44,7 @@ class PostCreator extends React.Component{
         <label htmlFor='content' className='text-small'>Content: </label>
         <input type='text' id='content' onChange={this.handleContentChange}></input>
         <br/>
-        <Button onClick={this.props.action} title={'Post'}/>
+        <Button onClick={this.props.action} title='Post'/>
       </form>
     </div>;
   }

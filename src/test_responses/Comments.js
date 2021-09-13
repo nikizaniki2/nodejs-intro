@@ -1,0 +1,1 @@
+export const Comments ={"count":2,"next":null,"previous":null,"results":[{"id":6,"content":"??","date":"2021-08-02T16:38:48.260183+03:00","author":{"id":1,"username":"nikola-sekulov"},"post":23},{"id":14,"content":"Did i fix commmenting?","date":"2021-08-06T14:03:18.530126+03:00","author":{"id":1,"username":"nikola-sekulov"},"post":23}]};

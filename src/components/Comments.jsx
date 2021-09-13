@@ -3,7 +3,7 @@ import '../App.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import axios from '../request';
-import {Button} from '../App';
+import {Button} from '../components/Button';
 import { NavLink } from "react-router-dom";
 
 function Comment ({ data }) {

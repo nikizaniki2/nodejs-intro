@@ -1,70 +1,56 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Post from './Post';
 import PostCreator from './PostCreator';
 import { loadPosts , deletePost } from '../App';
-import {Button} from '../App';
+import {Button} from '../components/Button';
 
-class NewsFeedClass extends React.Component {
-  constructor (props) {
-    super(props);
+export default function NewsFeedClass(props) {
+  const [paginator, setPaginator] = useState({});
+  const [posts, setPosts] = useState([]);
 
-    this.state = {
-      paginator: null,
-      posts: []
-    };
-
-    this.requestMorePosts = this.requestMorePosts.bind(this);
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     loadPosts()
-      .then(({data}) => {
-        this.setState({paginator: data}, () =>{});
-        this.setState({posts: data.results}, () =>{});
-      })
-      .catch(() => alert('Failed to load Posts from API'));
-  }
+      .then(({data})=> {
+        setPaginator(data);
+        setPosts(data.results);
+      });
+  }, []);
 
-    addPost = newPost =>{
-      this.setState({posts: [newPost, ...this.state.posts]});
+  const addPost = newPost =>{
+    setPosts([newPost, ...posts]);
+  };
+
+  const requestMorePosts = () =>{
+    if(paginator.next){
+      loadPosts(paginator.next)
+        .then(({data}) => {
+          setPaginator(data);
+          setPosts([...posts, ...data.results]);
+        });
+      // .catch(console.log);
     }
+  };
 
-    requestMorePosts(){
-      if(this.state.paginator.next){
-        loadPosts(this.state.paginator.next)
-          .then(({data}) => {
-            this.setState({paginator: data}, () =>{});
-            this.setState({posts: [...this.state.posts, ...data.results]}, () =>{});
-          })
-          .catch(() => alert('Failed to load Posts from API'));
-      }
-    }
-
-
-    //User load wait can probably be done better using a dependency?
-    render () {
-      if(this.state.paginator){
-        return (
-          <div className='NewsFeed'>
-            <header className='App-header'>
-              <PostCreator addPost={this.addPost} user={this.props.user}/>
-              <div className='posts__wrapper wrapper'>
-                { this.state.posts.map(postData => <Post key={postData.id} data={postData} onDelete={deletePost} user={this.props.user}/>) }
-              </div>
-              {this.state.paginator.next ?
-                <Button title='Load More' onClick={this.requestMorePosts}/>
-                :
-                null}
-            </header>
-          </div>);
-      }
-      else return null;
-    }
+  return(
+    <div className='NewsFeed'>
+      <header className='App-header'>
+        <PostCreator addPost={addPost} user={props.user}/>
+        <div className='posts__wrapper wrapper'>
+          {console.log(posts)}
+          { posts.map(postData => <Post key={postData.id} data={postData} onDelete={deletePost} user={props.user}/>) }
+        </div>
+        {paginator.next ?
+          <Button title='Load More' onClick={requestMorePosts}/>
+          :
+          null}
+      </header>
+    </div>);
 }
 
 NewsFeedClass.propTypes = {
   user: PropTypes.object,
 };
 
-export default NewsFeedClass;
+
+// export default NewsFeedClass;

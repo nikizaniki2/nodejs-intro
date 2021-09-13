@@ -1,6 +1,5 @@
 import './App.css';
 import React from 'react';
-import PropTypes from 'prop-types';
 import axios from './request';
 import NewsFeedClass from './components/NewsFeed';
 import ProfileView from './components/Profile';
@@ -32,12 +31,6 @@ async function loadUserPosts (user_id, page_url=null) {
 
 async function deletePost(post_id){
   return axios.delete(`http://server.domain.net/restapi/post/${post_id}/`);
-}
-
-function Button ({ title, onClick }) {
-  return (
-    <button onClick={onClick}>{title}</button>
-  );
 }
 
 // https://blog.pusher.com/getting-started-with-react-router-v4/
@@ -93,18 +86,10 @@ const Main = () => {
   return (<div className='Main'>Loading User...</div>);
 };
 
-Button.propTypes = {
-  title: PropTypes.string,
-  onClick: PropTypes.func,
-};
-
-
-
 export default App;
 
 export {
   Main,
-  Button,
   loadUser,
   loadUserByID,
   loadUserPosts,
