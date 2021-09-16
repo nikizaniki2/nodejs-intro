@@ -36,13 +36,7 @@ async function deletePost(post_id){
 // https://blog.pusher.com/getting-started-with-react-router-v4/
 // http://www.hackingwithreact.com/read/1/24/making-custom-urls-with-react-router-params
 
-const App = () => (
-  <div className='App'>
-    <Main />
-  </div>
-);
-
-const Main = () => {
+const App = () => {
   const [user, setUser] = useState();
 
   //User (/current) is now only loaded once (in Main)
@@ -61,8 +55,10 @@ const Main = () => {
 
   if(user === null){
     return(
-      <div className='Main'>
-        <NavBar></NavBar>
+      <div className='App'>
+        <header className='App-header'>
+          <NavBar/>
+        </header>
         <Switch>
           <Route path='/login' render={ () => (<div>PLACEHOLDER</div>)}/>
           <Route path='/register' render={ () => (<div>PLACEHOLDER</div>)}/>
@@ -73,8 +69,10 @@ const Main = () => {
 
   if(user){
     return (
-      <div className='Main'>
-        <NavBar user={user}></NavBar>
+      <div className='App'>
+        <header className='App-header'>
+          <NavBar user={user}></NavBar>
+        </header>
         <Switch>
           <Route exact path='/' render={(props) => (<NewsFeedClass {...props} user={user}/>)}/>
           <Route path='/profile/:user_id' render={(props) => (<ProfileView {...props} curr_user={user}/>)}/>
@@ -83,13 +81,12 @@ const Main = () => {
     );
   }
 
-  return (<div className='Main'>Loading User...</div>);
+  return (<div className='App'>Loading User...</div>);
 };
 
 export default App;
 
 export {
-  Main,
   loadUser,
   loadUserByID,
   loadUserPosts,

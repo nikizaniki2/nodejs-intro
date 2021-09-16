@@ -10,13 +10,13 @@ import '@testing-library/jest-dom';
 //Attemt getPosts Mock
 
 jest.mock('../App');
-jest.mock('../components/Post');
+// jest.mock('../components/Post');
 
 test('Check if newsFeedback renders hard coded posts from mocked loadPosts()', async () => {
-  MockLoadPosts.mockResolvedValue({data: Posts});
-  MockLoadComments.mockResolvedValue({data: Comments});
+  // MockLoadPosts.mockResolvedValue(Posts);
+  // MockLoadComments.mockResolvedValue({data: Comments});
   render(<NewsFeedClass user={User}/>);
-  console.log(await screen.findAllByText(/mock content/i));
+  console.log(await screen.findAllByText(/New User/i));
   // debug();
 });
 
