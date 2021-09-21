@@ -18,15 +18,23 @@ function Post ({ data, onDelete, user}) {
   const [comments, setComments] = useState([]);
   const [listed, setListed] = useState(true);
   const [paginator, setPaginator] = useState();
+  const [shortened, setShortened] = useState(false);
+  const [shortContent, setShortContent] = useState('');
 
   useEffect(() => {
+    console.log(data.content.length);
+    if(data.content.length > 50){
+      setShortContent(data.content.slice(0, 50));
+      setShortened(true);
+    }
+
     loadComments(data.id)
       .then(({data}) => {
         setPaginator(data);
         setComments(data.results);
       })
       .catch(() => alert('Failed to load comments from API'));
-  }, [data.id]);
+  }, [data.content, data.id]);
 
   const deletePost = () => {
     onDelete(data.id)
@@ -47,6 +55,11 @@ function Post ({ data, onDelete, user}) {
     }
   }
 
+  function extend(){
+    // extends truncated text in this func
+    setShortened(false);
+  }
+
   if(paginator){
     return listed ? (
       <div className={'post__wrapper'}>
@@ -54,9 +67,17 @@ function Post ({ data, onDelete, user}) {
           <NavLink to={'/profile/' + data.author.id  + '/'}>{data.author.username}</NavLink>
         </div>
         <div className='post__title'>{data.title}</div>
-        <div className='post__content'>{data.content}
-          <Button onClick={deletePost} title={'Delete post'}/>
+        <div className='post__content'>
+          {shortened ?
+            <div>
+              {shortContent}
+              <button className='empty-button' onClick={extend}>... See more</button>
+            </div>
+            :
+            data.content
+          }
         </div>
+        <Button onClick={deletePost} title={'Delete post'}/>
         <hr/>
         <CommentCreator addComment={addComment} postId={data.id}  user={user}/>
         <div className='comment__list'>

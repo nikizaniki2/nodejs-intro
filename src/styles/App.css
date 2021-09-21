@@ -17,7 +17,8 @@
 }
 
 .post__wrapper, .comment__wrapper, .post__creator__wrapper {
-  background-color: var(--form-background);
+  box-shadow: 0px 0px 10px var(--post-background-shadow);
+  background-color: var(--post-background);
   margin: 10px;
   padding: 10px;
   border-radius: 3px;
@@ -31,6 +32,8 @@
 }
 
 .comment__wrapper{
+  background-color: var(--comment-background);
+  box-shadow: 0px 0px 5px var(--comment-background-shadow);
   text-align: left;
   font-size: calc(10px + 1vmin);
 }
@@ -91,6 +94,25 @@ font-size: medium;
   background-color: #585858;
 }
 
+.empty-button{
+  font-family: 'Roboto', sans-serif;
+  border-radius: 0px;
+  background: none;
+  border: none;
+  color: var(--url);
+  font-size: calc(10px + 1.5vmin);
+}
+
+input[type=text], select {
+  width: 40%;
+  padding: 2px 4px;
+  margin: 2px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
 :root{
   --black: #32322c;
   --blue: #4c6085;
@@ -98,7 +120,10 @@ font-size: medium;
   --green: #13c4a3;
   --red: #d64550;
   --light-red: #ea9e8d;
-  --form-background: #424242;
+  --post-background: #424242;
+  --post-background-shadow: #2e2e2e;
+  --comment-background: #5f5f5f;
+  --comment-background-shadow: #4e4e4e;
   --text: #b3b3b3;
   --url: #e2e2e2;
 }

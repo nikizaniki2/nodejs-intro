@@ -36,12 +36,9 @@ class PostCreator extends React.Component{
     return <div className='post__creator post__creator__wrapper'>
       <p className='post__creator__username'>{this.props.user.username}</p>
       <form className='PostContent' onSubmit={this.handleSubmit}>
-        {/* https://www.w3schools.com/tags/tag_input.asp */}
-        <label htmlFor='title' className='text-small'>Title: </label>
-        <input type='text' id='title' onChange={this.handleTitleChange}></input>
+        <input type='text' id='title' placeholder='Title...' onChange={this.handleTitleChange}></input>
         <br/>
-        <label htmlFor='content' className='text-small'>Content: </label>
-        <input type='text' id='content' onChange={this.handleContentChange}></input>
+        <input type='text' id='content' placeholder='Content...' onChange={this.handleContentChange}></input>
         <br/>
         <Button onClick={this.props.action} title={'Post'}/>
       </form>
