@@ -1,4 +1,3 @@
-import '../App.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Button} from '../App';
@@ -34,8 +33,8 @@ class PostCreator extends React.Component{
   }
 
   render () {
-    return <div className='post__creator wrapper'>
-      <p className='Username text-small'>{this.props.user.username}</p>
+    return <div className='post__creator post__creator__wrapper'>
+      <p className='post__creator__username'>{this.props.user.username}</p>
       <form className='PostContent' onSubmit={this.handleSubmit}>
         {/* https://www.w3schools.com/tags/tag_input.asp */}
         <label htmlFor='title' className='text-small'>Title: </label>

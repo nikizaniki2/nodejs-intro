@@ -1,5 +1,4 @@
 import {useState, useEffect} from 'react';
-import '../App.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import axios from '../request';
@@ -52,11 +51,13 @@ function Post ({ data, onDelete, user}) {
     return listed ? (
       <div className={'post__wrapper'}>
         <div className='post__author'>
-          Author: <NavLink to={'/profile/' + data.author.id  + '/'}>{data.author.username}</NavLink>
+          <NavLink to={'/profile/' + data.author.id  + '/'}>{data.author.username}</NavLink>
         </div>
-        <div className='post__title'>Title: {data.title}</div>
-        <div className='post__content'>{data.content}</div>
-        <Button onClick={deletePost} title={'Delete post'}/>
+        <div className='post__title'>{data.title}</div>
+        <div className='post__content'>{data.content}
+          <Button onClick={deletePost} title={'Delete post'}/>
+        </div>
+        <hr/>
         <CommentCreator addComment={addComment} postId={data.id}  user={user}/>
         <div className='comment__list'>
           { comments ?

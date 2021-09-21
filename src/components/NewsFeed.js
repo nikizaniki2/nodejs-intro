@@ -47,16 +47,14 @@ class NewsFeedClass extends React.Component {
       if(this.state.paginator){
         return (
           <div className='NewsFeed'>
-            <header className='App-header'>
-              <PostCreator addPost={this.addPost} user={this.props.user}/>
-              <div className='posts__wrapper wrapper'>
-                { this.state.posts.map(postData => <Post key={postData.id} data={postData} onDelete={deletePost} user={this.props.user}/>) }
-              </div>
-              {this.state.paginator.next ?
-                <Button title='Load More' onClick={this.requestMorePosts}/>
-                :
-                null}
-            </header>
+            <PostCreator addPost={this.addPost} user={this.props.user}/>
+            <div className='posts__wrapper wrapper'>
+              { this.state.posts.map(postData => <Post key={postData.id} data={postData} onDelete={deletePost} user={this.props.user}/>) }
+            </div>
+            {this.state.paginator.next ?
+              <Button title='Load More' onClick={this.requestMorePosts}/>
+              :
+              null}
           </div>);
       }
       else return null;

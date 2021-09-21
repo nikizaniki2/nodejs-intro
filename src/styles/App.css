@@ -1,0 +1,104 @@
+.App {
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  background-color: var(--black);
+  color: var(--text);
+}
+
+.NewsFeed{
+  width: 100%;
+  max-width: 500px;
+}
+
+.post__wrapper, .comment__wrapper, .post__creator__wrapper {
+  background-color: var(--form-background);
+  margin: 10px;
+  padding: 10px;
+  border-radius: 3px;
+  max-width: 450px;
+}
+
+.post__creator__username{
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: calc(10px + 1.2vmin);
+}
+
+.comment__wrapper{
+  text-align: left;
+  font-size: calc(10px + 1vmin);
+}
+
+.post__author {
+  text-align: left;
+  font-size: calc(10px + 1vmin);
+}
+
+.post__title {
+  font-size: calc(10px + 1.2vmin);
+}
+
+.post__content {
+  padding-top: 1vh;
+  font-size: calc(10px + 1.5vmin);
+}
+
+.post__creator{
+  text-align: center;
+  margin-bottom: 1vh;
+}
+
+.text-small{
+  font-size: small;
+}
+
+.wrapper{
+  border: none;
+  border-radius: 6px;
+}
+
+a {
+  color: var(--url);
+  text-decoration: none;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 1vh;
+}
+
+.button {
+  border-radius: 6px;
+pointer-events: auto;
+cursor: pointer;
+background: none;
+  color: var(--url);
+border: none;
+padding: 0.3rem 0.3rem;
+margin: 1vw;
+font-size: medium;
+}
+
+.button:hover{
+  background-color: #585858;
+}
+
+:root{
+  --black: #32322c;
+  --blue: #4c6085;
+  --light-green: #36f1cd;
+  --green: #13c4a3;
+  --red: #d64550;
+  --light-red: #ea9e8d;
+  --form-background: #424242;
+  --text: #b3b3b3;
+  --url: #e2e2e2;
+}

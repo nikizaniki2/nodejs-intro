@@ -1,4 +1,3 @@
-import '../App.css';
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {loadUserByID} from '../App';
