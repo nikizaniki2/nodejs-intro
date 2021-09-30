@@ -22,7 +22,6 @@ function Post ({ data, onDelete, user}) {
   const [shortContent, setShortContent] = useState('');
 
   useEffect(() => {
-    console.log(data.content.length);
     if(data.content.length > 50){
       setShortContent(data.content.slice(0, 50));
       setShortened(true);

@@ -1,19 +1,70 @@
-.App {
+body, html {
   font-family: 'Roboto', sans-serif;
   text-align: center;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+
   font-size: calc(10px + 2vmin);
   background-color: var(--black);
   color: var(--text);
+  height: 100%;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  align-items: center;
+  justify-content: center;
 }
 
 .NewsFeed{
+  flex: 1;
+
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+
   width: 100%;
-  max-width: 500px;
+  overflow: auto;
+}
+
+.toolbar{
+  flex-shrink: 0;
+
+  align-items: center;
+  height: 50px;
+  display: flex;
+  justify-content: right;
+  background-color: red;
+}
+
+.app_container{
+  flex: 1;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+.posts_container{
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  
+  overflow: auto;
+}
+
+.side-bar{
+  display: flex;
+  flex-direction: column;
+  background-color: blue;
+  width: 200px;
 }
 
 .post__wrapper, .comment__wrapper, .post__creator__wrapper {
@@ -22,7 +73,7 @@
   margin: 10px;
   padding: 10px;
   border-radius: 3px;
-  max-width: 450px;
+  width: 450px;
 }
 
 .post__creator__username{
